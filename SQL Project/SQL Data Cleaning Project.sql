@@ -1,16 +1,21 @@
--- Data Cleaning
+-- SQL Project - Data Cleaning
 
 use cleaning_dataset;
 
 select * from layoffs;
 
+-- Now when we are data cleaning we usually follow a few steps
 -- 1. Remove Duplicate
 -- 2. Standardize the Data
--- 3. Nul Values or blank values
+-- 3. Null Values or blank values
 -- 4. Remove Any Colums Rows
+
+-- first thing we want to do is create a staging table. This is the one we will work in and clean the data. We want a table with the raw data in case something happens
 
 CREATE TABLE layoffs_copy
 LIKE layoffs;
+
+-- 1. Remove Duplicates
 
 select * from layoffs_copy;
 
@@ -118,6 +123,8 @@ set `date` = str_to_date(`date`, '%m/%d/%Y');
 alter table layoffs_copy2
 modify column `date` date;
 
+-- 3. Null Values or blank values
+
 select * from layoffs_copy2
 where total_laid_off is null
 and percentage_laid_off is null;
@@ -148,6 +155,8 @@ join layoffs_copy2 t2
 set t1.industry = t2.industry
 where t1.industry is null 
 and t2.industry is not null;
+
+-- 4. Remove Any Colums Rows
 
 select *
 from layoffs_copy2;  
